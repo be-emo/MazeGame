@@ -17,8 +17,6 @@ public class BallOnFloor : MonoBehaviour
     {
 
     }
-
-    // ボールと各フロアの衝突の瞬間の判定を行う
     /*
     void OnCollisionEnter(Collision other) {
         Debug.Log("enter");
@@ -84,14 +82,13 @@ public class BallOnFloor : MonoBehaviour
                 serialHandler.Write("k");
                 break;
             default:
-                Debug.Log("接触していません");
+                Debug.Log("");
                 break;
         }
         serialHandler.Write(",");
     }
     */
 
-    // ボールと各フロアの衝突中の判定を行う
     void OnCollisionStay(Collision other) {
         switch (other.gameObject.name)
         {
@@ -102,7 +99,7 @@ public class BallOnFloor : MonoBehaviour
             case "Floor_2":
                 serialHandler.Write("2");
                 break;
-                Debug.Log("2");
+                // Debug.Log("2");
             case "Floor_3":
                 serialHandler.Write("3");
                 Debug.Log("3");
@@ -127,6 +124,7 @@ public class BallOnFloor : MonoBehaviour
                 serialHandler.Write("8");
                 Debug.Log("8");
                 break;
+            /*
             case "Floor_9":
                 serialHandler.Write("9");
                 Debug.Log("9");
@@ -175,15 +173,13 @@ public class BallOnFloor : MonoBehaviour
                 serialHandler.Write("k");
                 Debug.Log("20");
                 break;
+            */
             default:
-                Debug.Log("接触していません");
+                Debug.Log("NonTouched");
                 break;
         }
         serialHandler.Write(",");
     }
-
-    // ボールと各フロアの衝突の離脱の判定を行う
-    // 衝突がなくなるときには，文字列"x"をシリアル通信で送信し，振動を終了させる
     void OnCollisionExit(Collision other) {
         Debug.Log("exit");
         switch (other.gameObject.name)
@@ -212,6 +208,7 @@ public class BallOnFloor : MonoBehaviour
             case "Floor_8":
                 serialHandler.Write("x");
                 break;
+            /*
             case "Floor_9":
                 serialHandler.Write("x");
                 break;
@@ -248,6 +245,7 @@ public class BallOnFloor : MonoBehaviour
             case "Floor_20":
                 serialHandler.Write("x");
                 break;
+            */
         }
     }
 }

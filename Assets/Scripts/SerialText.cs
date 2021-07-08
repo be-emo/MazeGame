@@ -12,7 +12,6 @@ public class SerialText : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		//信号を受信したときに、そのメッセージの処理を行う
 		serialHandler.OnDataReceived += OnDataReceived;
 	}
 
@@ -22,14 +21,11 @@ public class SerialText : MonoBehaviour
 
 	}
 
-	/*
-	 * シリアルを受け取った時の処理
-	 */
 	void OnDataReceived(string message)
 	{
 		try
 		{
-			text.text = message; // シリアルの値をテキストに表示
+			text.text = message;
 		}
 		catch (System.Exception e)
 		{

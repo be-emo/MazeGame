@@ -1,18 +1,29 @@
 using UnityEngine;
-using System.Collections;
 using System.IO.Ports;
+using System.Collections;
 using System.Threading;
 
 public class SerialHandler : MonoBehaviour
 {
-	public delegate void SerialDataReceivedEventHandler(string message);
+	// SerialDataReceivedEventHandler ????????????
+	public delegate void SerialDataReceivedEventHandler (string message);
+
+	// event ????????????????
+	// event ?????? ??????????
+	// ???????????????????
 	public event SerialDataReceivedEventHandler OnDataReceived;
 
-	public string portName = "COM3";
-	public int baudRate = 9600;  // ボーレート(Arduinoに記述したものに合わせる)
+	// Only for Mac
+	// Please change for your environment
+	public string portName = "/dev/cu.usbmodem14201";
+
+	// ????????????????
+	public int baudRate = 9600;
 
 	private SerialPort serialPort_;
 	private Thread thread_;
+
+	// ?????
 	private bool isRunning_ = false;
 
 	private string message_;
@@ -27,6 +38,7 @@ public class SerialHandler : MonoBehaviour
 	{
 		if (isNewMessageReceived_)
 		{
+			// ??????? event ??????????????
 			OnDataReceived(message_);
 		}
 		isNewMessageReceived_ = false;
@@ -40,13 +52,16 @@ public class SerialHandler : MonoBehaviour
 	private void Open()
 	{
 		serialPort_ = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
-		//または
 		//serialPort_ = new SerialPort(portName, baudRate);
+
+		// ?????????????????
 		serialPort_.Open();
 
 		isRunning_ = true;
 
 		thread_ = new Thread(Read);
+
+		// ?????????? Running ?????
 		thread_.Start();
 	}
 
@@ -57,12 +72,19 @@ public class SerialHandler : MonoBehaviour
 
 		if (thread_ != null && thread_.IsAlive)
 		{
+			/* ?????????????????????????????????????????
+			 * ?? COM ??? SendMessage ???????????????
+			 */
 			thread_.Join();
 		}
 
 		if (serialPort_ != null && serialPort_.IsOpen)
 		{
+			// ?????????IsOpen ?????? false ?????
+			// ?? Stream ?????????????
 			serialPort_.Close();
+
+			// Component ??????????????????????????
 			serialPort_.Dispose();
 		}
 	}
@@ -71,6 +93,9 @@ public class SerialHandler : MonoBehaviour
 	{
 		while (isRunning_ && serialPort_ != null && serialPort_.IsOpen)
 		{
+			message_ = serialPort_.ReadLine();
+			isNewMessageReceived_ = true;
+			/*
 			try
 			{
 				message_ = serialPort_.ReadLine();
@@ -80,11 +105,14 @@ public class SerialHandler : MonoBehaviour
 			{
 				Debug.LogWarning(e.Message);
 			}
+			*/
 		}
 	}
 
 	public void Write(string message)
 	{
+		serialPort_.Write(message);
+		/*
 		try
 		{
 			serialPort_.Write(message);
@@ -93,5 +121,6 @@ public class SerialHandler : MonoBehaviour
 		{
 			Debug.LogWarning(e.Message);
 		}
+		*/
 	}
 }
